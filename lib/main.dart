@@ -5,18 +5,43 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeData _theme = ThemeData(
+  useMaterial3: true,
+  colorSchemeSeed: Colors.blue,
+);
+
+  void _setTheme(ThemeData theme) {
+    setState(() {
+      _theme = theme;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Team Challenge',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      theme: _theme,
+      home: HomePage(onThemeChanged: _setTheme),
     );
   }
 }
 
+
 class HomePage extends StatelessWidget {
+  final Function(ThemeData) onThemeChanged;
+
+  HomePage({required this.onThemeChanged});
+
+  final ThemeData blueTheme = ThemeData(primarySwatch: Colors.blue);
+  final ThemeData purpleTheme = ThemeData(primarySwatch: Colors.purple);
+  final ThemeData greenTheme = ThemeData(primarySwatch: Colors.green);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +50,38 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // ================= THEME BUTTONS =================
+            Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    ElevatedButton(
+      onPressed: () => onThemeChanged(
+  ThemeData(useMaterial3: false, colorSchemeSeed: Colors.blue),
+),
+
+      child: const Text('Blue'),
+    ),
+    const SizedBox(width: 8),
+    ElevatedButton(
+      onPressed: () => onThemeChanged(
+  ThemeData(useMaterial3: false, colorSchemeSeed: Colors.purple),
+),
+
+      child: const Text('Purple'),
+    ),
+    const SizedBox(width: 8),
+    ElevatedButton(
+      onPressed: () => onThemeChanged(
+  ThemeData(useMaterial3: false, colorSchemeSeed: Colors.green),
+),
+
+      child: const Text('Green'),
+    ),
+  ],
+),
+
+const SizedBox(height: 16),
+
             // ================= PROFILE CARD =================
             Card(
               elevation: 3,
